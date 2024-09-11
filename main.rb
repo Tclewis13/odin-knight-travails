@@ -2,6 +2,8 @@ require 'rubocop'
 require 'pry-byebug'
 require 'rgl/adjacency'
 require 'rgl/dot'
+require 'rgl/traversal'
+require 'rgl/dijkstra'
 require_relative 'lib/space'
 
 def get_legal_moves(origin)
@@ -58,4 +60,4 @@ board = setup_spaces(board)
 graph = RGL::AdjacencyGraph[]
 
 make_move_graph(board, graph)
-graph.write_to_graphic_file('jpg')
+puts graph.dijkstra_shortest_path(Hash.new(1), 1, 28)
