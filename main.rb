@@ -63,13 +63,26 @@ def graph_to_board(board, graph_index)
   end
 end
 
+def board_to_graph(board, x, y)
+  board.each do |row|
+    row.each do |column|
+      return column.graph_index if column.board_x == x && column.board_y == y
+    end
+  end
+end
+
+def knight_moves(origin, target, board, graph)
+  origin_graph_index = board_to_graph(board, origin[0], origin[1])
+  target_graph_index = board_to_graph(board, target[0], target[1])
+  graph_solution = graph.dijkstra_shortest_path(Hash.new(1), origin_graph_index, target_graph_index)
+  graph_solution.each do |move|
+    coordinate = graph_to_board(board, move)
+    puts "[#{coordinate[0]} , #{coordinate[1]}]"
+  end
+end
+
 board = Array.new(8) { Array.new(8) }
 board = setup_spaces(board)
 graph = RGL::AdjacencyGraph[]
-
 make_move_graph(board, graph)
-graph_solution = graph.dijkstra_shortest_path(Hash.new(1), 1, 28)
-graph_solution.each do |move|
-  coordinate = graph_to_board(board, move)
-  puts "[#{coordinate[0]} , #{coordinate[1]}]"
-end
+knight_moves([0, 0], [7, 7], board, graph)
