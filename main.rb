@@ -55,9 +55,21 @@ def print_board(board)
   end
 end
 
+def graph_to_board(board, graph_index)
+  board.each do |row|
+    row.each do |column|
+      return [column.board_x, column.board_y] if column.graph_index == graph_index
+    end
+  end
+end
+
 board = Array.new(8) { Array.new(8) }
 board = setup_spaces(board)
 graph = RGL::AdjacencyGraph[]
 
 make_move_graph(board, graph)
-puts graph.dijkstra_shortest_path(Hash.new(1), 1, 28)
+graph_solution = graph.dijkstra_shortest_path(Hash.new(1), 1, 28)
+graph_solution.each do |move|
+  coordinate = graph_to_board(board, move)
+  puts "[#{coordinate[0]} , #{coordinate[1]}]"
+end
